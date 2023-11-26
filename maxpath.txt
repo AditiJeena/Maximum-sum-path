@@ -1,0 +1,56 @@
+#include<iostream>
+#include<bits/stdc++.h>
+
+using namespace std;
+
+struct node
+{
+    int data;
+    struct node *left,*right;
+};
+
+typedef struct node node;
+
+node* create(int data)
+{
+    node* newnode=(node*)malloc(sizeof(node));
+    newnode->data=data;
+    newnode->left=NULL;
+    newnode->right=NULL;
+
+    return(newnode);
+}
+
+int findmaxpath(node* root,int &maxi)
+{
+    if(root==NULL)
+    {
+        return 0;
+    }
+
+    int leftpath=max(0,findmaxpath(root->left,maxi));
+    int rightpath=max(0,findmaxpath(root->right,maxi));
+    int val=root->data;
+    maxi=max(maxi,(leftpath+rightpath)+val);
+
+    return max(leftpath,rightpath)+val;
+}
+int maxpathsum(node* root)
+{
+    int maxi=INT_MIN;
+    findmaxpath(root,maxi);
+    return maxi;
+}
+int main()
+{
+    node* root=create(-10);
+    root->left=create(8);
+    root->right=create(20);
+    root->right->left=create(25);
+    root->right->right=create(7);
+
+    int ans=maxpathsum(root);
+
+    cout<<"The maximum path sum for this tree is:"<<ans;
+    return 0;
+}
